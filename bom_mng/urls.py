@@ -11,5 +11,6 @@ urlpatterns = [
     path('edit_bom/<int:bom1_id>/', bom_views.edit_bom, name = 'edit_bom'),
     path('delete_bomitm/',bom_views.delete_bomitm, name = 'del_bomitm'),
     path('uploadbom/', bom_views.upload_bom, name = 'uploadbom'),
+    
 ]
 
