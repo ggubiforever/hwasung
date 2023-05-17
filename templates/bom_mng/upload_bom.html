@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block content %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div style = "display:flex; justify-content:center;">
+<div class = "container my-3" style = "width:600px">
+    <p style="text-align:center">업로드할 BOM 파일을 선택하십시오</p>
+    <form id = "upbom" method="post">
+        {% csrf_token %}
+    <div class="input-group">
+    <input type = "file" class="form-control" name = "excel_file"  accept=".xlsx">
+    <button class="btn btn-primary" type="submit">적용</button>
+    </div>
+    </form>
+
+</div>
+</div>
+
+
+
+{% endblock %}

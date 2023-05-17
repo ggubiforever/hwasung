@@ -1,0 +1,191 @@
+{% load static %}
+<!doctype html>
+<html lang="ko">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'bootstrap.min.css' %}">
+    <!-- pybo CSS -->
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <!-- 로그인  Bootstrap CSS -->
+
+    <title>Let's go to the Top!</title>
+</head>
+<body>
+<!-- 네비게이션바 -->
+<!-- 네비게이션바 -->
+{% include "navbar.html" %}
+<!-- 기본 템플릿 안에 삽입될 내용 Start -->
+{% for message in messages %}
+    <div class="alert {{ message.tags }} alert-auto-dismissible alert-dismissible notification-container text-center" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+{% endfor %}
+<div class="container">
+    <div class = "my-3" style = "background-color:#C0C0C0">
+    <h5 class="my-3 border-bottom pb-2">BOM 등록</h5>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        <!-- 오류표시 Start -->
+        {% if form.errors %}
+        <div class="alert alert-danger" role="alert">
+            {% for field in form %}
+            {% if field.errors %}
+            <div>
+                <strong>{{ field.label }}</strong>
+                {{ field.errors }}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+        <!-- 오류표시 End -->
+        <div style="float: left; width: 20%;">
+        <div class="mb-3">
+            <label for="jepum_code" class="form-label">제품코드</label>
+            <input type="text" class="form-control" name="jepum_code" id="jepum_code"
+                   value="{{ form.jepum_code.value|default_if_none:'' }}" style="width:200px;height:25px;font-size:18px;">
+
+            <label for="seq" class="form-label">순번</label>
+            <input type="text" class="form-control" name="seq" id="seq"
+                   value="{{ form.seq.value|default_if_none:'' }}" style="width:200px;height:25px;font-size:18px;">
+
+            <label for="level" class="form-label">레벨</label>
+            <input type="text" class="form-control" name="level" id="level"
+                   value="{{ form.level.value|default_if_none:'' }}" style="width:200px;height:25px;font-size:18px;">
+
+            <label for="jaje_code" class="form-label">자재코드</label>
+            <input type="text" class="form-control" name="jaje_code" id="jaje_code"
+                   value="{{ form.jaje_code.value|default_if_none:'' }}" style="width:200px;height:25px;font-size:18px;">
+
+            <label for="pumname" class="form-label">품명</label>
+            <input type="text" class="form-control" name="pumname" id="pumname"
+                   value="{{ form.pumname.value|default_if_none:'' }}" style="width:200px;height:25px;font-size:18px;">
+
+            <label for="descript" class="form-label">규격</label>
+            <input type="text" class="form-control" name="descript" id="descript"
+                   value="{{ form.descript.value|default_if_none:'' }}" style="width:200px;height:25px;font-size:18px;" >
+
+            <label for="danwi" class="form-label">단위</label>
+            <input type="text" class="form-control" name="danwi" id="danwi"
+                   value="{{ form.danwi.value|default_if_none:'' }}" style="width:200px;height:25px;font-size:18px;">
+
+            <label for="soyo" class="form-label">소요량</label>
+            <input type="text" class="form-control" name="soyo" id="soyo"
+                   value="{{ form.soyo.value|default_if_none:'' }}" style="width:200px;height:25px;font-size:18px;">
+
+            <label for="last_update" class="form-label">업데이트일자</label>
+            <input type="text"  class="form-control" name="last_update" id="last_update"
+                   value="{{ form.last_update.value|default_if_none:'' }}" style="width:200px;height:25px;font-size:18px;">
+        </div>
+            {% if cond %}
+            <button type="submit" class="btn btn-primary" >Update</button>
+            {% endif %}
+        </div>
+        <div style="float: left; width: 80%;">
+            <table class="table">
+                <thead>
+                <tbody>
+                <tr class = "table-green">
+                    <th>제품코드</th>
+                    <th>순번</th>
+                    <th>LEVEL</th>
+                    <th>자재코드</th>
+                    <th>품명</th>
+                    <th>규격</th>
+                    <th>생산지</th>
+                    <th>단위</th>
+                    <th>소요량</th>
+                    <th>업데이트</th>
+                </tr>
+        {% if bom1_list %}
+        {% for b in bom1_list %}
+        <tr>
+            <td>{{ b.jepum_code }}</td>
+            <td>{{ b.seq }}</td>
+            <td>{{ b.level }}</td>
+            <td><a href="{% url 'bom_mng:edit_bom' b.id %}">{{ b.jaje_code }}</a></td>
+            <td>{{ b.pumname }}</td>
+            <td>{{ b.descript }}</td>
+            <td>{{ b.place }}</td>
+            <td>{{ b.danwi }}</td>
+            <td>{{ b.soyo }}</td>
+            <td>{{ b.last_update }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan = 11>No Data</td>
+        </tr>
+        {% endif %}
+        </tbody>
+        </thead>
+    </table>
+        <ul class="pagination justify-content-center">
+            {% if bom1_list.has_previous %}
+            <li class = "page-item">
+                <a class="page-link" href="?page={{ bom1_list.previous_page_number }}">이전</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
+            </li>
+            {% endif %}
+
+            {% for page_number in bom1_list.paginator.page_range %}
+            {% if page_number == bom1_list.number %}
+            <li class="page-item active" aria-current="page">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% else %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ page_number }}">{{ page_number }}</a>
+            </li>
+            {% endif %}
+            {% endfor %}
+            {% if bom1_list.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ bom1_list.next_page_number }}">다음</a>
+            </li>
+            {% else %}
+            <li class="page-item disabled">
+                <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
+            </li>
+            {% endif %}
+        </ul>
+        </div>
+    </form>
+    <form method="get" id="deleteForm" action = "{% url 'bom_mng:del_bomitm' %}">
+        <input type="hidden" id="jepum" name="jepum" value="{{ jepum|default_if_none:'' }}">
+        <input type="hidden" id = "seqs" name ="seqs" value = "{{ seqs|default_if_none:'' }}">
+        {% if cond %}
+        <button type="submit" class="btn btn-primary" id="btn">DELETE</button>
+        {% endif %}
+    </form>
+
+<script type='text/javascript'>
+window.setTimeout(function() {
+    $(".alert-auto-dismissible").fadeTo(500, 0).slideUp(500, function(){
+        $(this).remove();
+    });
+}, 4000);
+
+const jepum = document.getElementById('jepum_code').value;
+const seqs = document.getElementById("seq").value;
+btn.addEventListener('click', function() {
+    document.getElementById('jepum').value = jepum;
+    document.getElementById('seqs').value = seqs;  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
+    document.getElementById('deleteForm').submit();
+});
+</script>
+</div>
+
+<script src="{% static 'bootstrap.min.js' %}"></script>
+</body>
+</html>
