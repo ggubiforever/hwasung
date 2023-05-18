@@ -15,8 +15,7 @@ from django.contrib.messages import constants as messages
 <<<<<<< HEAD
 import pymysql
 pymysql.install_as_MySQLdb()
-=======
->>>>>>> d41c0292d5087df39f3d0223501cb17ba31ff26c
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -45,12 +44,6 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-<<<<<<< HEAD
-
-=======
-    "debug_toolbar",
-    "bootstrap4",
->>>>>>> d41c0292d5087df39f3d0223501cb17ba31ff26c
 
 ]
 
@@ -91,8 +84,6 @@ WSGI_APPLICATION = "config.wsgi.application"
 <<<<<<< HEAD
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases  --
 =======
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
->>>>>>> d41c0292d5087df39f3d0223501cb17ba31ff26c
 
 DATABASES = {
     "default": {
@@ -100,13 +91,9 @@ DATABASES = {
         "NAME": 'hwasung_gni',
         "USER": "samc",
         "PASSWORD": "sam12345",
-<<<<<<< HEAD
         "HOST": "database-1.cw3tpkqexslr.ap-northeast-2.rds.amazonaws.com",
         "PORT" : "3306",
-=======
-        "HOST": "203.233.239.194",
-        "PORT" : "32705",
->>>>>>> d41c0292d5087df39f3d0223501cb17ba31ff26c
+
 
     }
 }
