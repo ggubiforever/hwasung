@@ -14,6 +14,7 @@ from pathlib import Path
 from django.contrib.messages import constants as messages
 
 import pymysql
+pymysql.version_info = (1, 3, 13, "final", 0)
 pymysql.install_as_MySQLdb()
 
 
