@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from django.contrib.messages import constants as messages
-<<<<<<< HEAD
+
 import pymysql
 pymysql.install_as_MySQLdb()
 
@@ -81,9 +81,9 @@ WSGI_APPLICATION = "config.wsgi.application"
 
 
 # Database
-<<<<<<< HEAD
+
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases  --
-=======
+
 
 DATABASES = {
     "default": {
