@@ -11,6 +11,10 @@ urlpatterns = [
     path('edit_bom/<int:bom1_id>/', bom_views.edit_bom, name = 'edit_bom'),
     path('delete_bomitm/',bom_views.delete_bomitm, name = 'del_bomitm'),
     path('uploadbom/', bom_views.upload_bom, name = 'uploadbom'),
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> d41c0292d5087df39f3d0223501cb17ba31ff26c
 ]
 
