@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% load bom_filter %}
+{% block content %}
+
+<div class = "container my-3">
+    <div class="row my-3">
+        <div class="col-6">
+            <a href="{% url 'bom_mng:add_bom' %}" class="btn btn-primary">BOM등록</a>
+            <a href="{% url 'bom_mng:uploadbom' %}" class="btn btn-primary">BOM업로드</a>
+
+        </div>
+        <div class="col-6">
+            <div class="input-group">
+                <select style="width: 6em;"  class="form_control" id = "search_type" >
+                <option value="jepum_code" {% if kw_type == 'jepum_code' %} selected {% endif %}> 제품코드</option>
+                <option value="jaje_code" {% if kw_type == 'jaje_code' %} selected {% endif %}>자재코드</option>
+                <option value="pumname" {% if kw_type == 'pumname' %} selected {% endif %}>품명</option>
+                </select>
+                <input type="text" placeholder="검색어입력해주세요"  id="search_kw" class="form-control" value="{{ kw|default_if_none:'' }}">
+                <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button" id="btn_search">찾기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <table class="table">
+        <thead>
+        <tr class = "table-dark">
+            <th>번호</th>
+            <th>제품코드</th>
+            <th>품명</th>
+            <th>규격</th>
+            <th>생산지</th>
+            <th>단위</th>
+            <th>업데이트</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% if bom1_list %}
+        {% for b in bom1_list %}
+        <tr>
+            <td>
+                <!-- 번호 = 전체건수 - 시작인덱스 - 현재인덱스 + 1 -->
+                {{ bom1_list.paginator.count|sub:bom1_list.start_index|sub:forloop.counter0|add:1 }}
+            </td>
+            <td><a href="{% url 'bom_mng:detail' b.id %}">{{ b.jepum_code }}</a></td>
+            <td>{{ b.jepum_code }}</td>
+            <td>{{ b.description }}</td>
+            <td>{{ b.place }}</td>
+            <td>{{ b.soyo_unit }}</td>
+            <td>{{ b.last_update }}</td>
+        </tr>
+        {% endfor %}
+        {% else %}
+        <tr>
+            <td colspan = 9>No data</td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+     <!-- 페이징처리 시작 -->
+    <ul class="pagination justify-content-center">
+        <!-- 이전페이지 -->
+        {% if bom1_list.has_previous %}
+        <li class="page-item">
+             <a class="page-link" data-page="{{ bom1_list.previous_page_number }}"
+           href="javascript:void(0)">이전</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+            <a class="page-link" tabindex="-1" aria-disabled="true"
+           href="javascript:void(0)">이전</a>
+        </li>
+        {% endif %}
+        <!-- 페이지리스트 -->
+        {% for page_number in bom1_list.paginator.page_range %}
+        {% if page_number >= bom1_list.number|add:-5 and page_number <= bom1_list.number|add:5 %}
+        {% if page_number == bom1_list.number %}
+        <li class="page-item active" aria-current="page">
+            <a class="page-link" data-page="{{ page_number }}"
+           href="javascript:void(0)">{{ page_number }}</a>
+        </li>
+        {% else %}
+        <li class="page-item">
+            <a class="page-link" data-page="{{ page_number }}"
+           href="javascript:void(0)">{{ page_number }}</a>
+        </li>
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+        <!-- 다음페이지 -->
+        {% if bom1_list.has_next %}
+        <li class="page-item">
+           <a class="page-link" data-page="{{ bom1_list.next_page_number }}"
+           href="javascript:void(0)">다음</a>
+        </li>
+        {% else %}
+        <li class="page-item disabled">
+             <a class="page-link" tabindex="-1" aria-disabled="true"
+           href="javascript:void(0)">다음</a>
+        </li>
+        {% endif %}
+    </ul>
+    <!-- 페이징처리 끝 -->
+
+</div>
+<form id="searchForm" method="get" action="{% url 'index' %}">
+    <input type="hidden" id="page" name="page" value="{{ page }}">
+    <input type="hidden" id="kw" name="kw" value="{{ kw|default_if_none:'' }}">
+    <input type="hidden" id="type" name ="type" value = "{{ type }}">
+
+</form>
+
+<script type='text/javascript'>
+const stype = document.getElementById('search_type');
+const len_type = stype.options.length;
+const page_elements = document.getElementsByClassName("page-link");
+Array.from(page_elements).forEach(function(element) {
+    element.addEventListener('click', function() {
+        document.getElementById('page').value = this.dataset.page;
+        document.getElementById('type').value = document.getElementById('search_type').options[document.getElementById("search_type").selectedIndex].value;
+        document.getElementById('kw').value = document.getElementById('search_kw').value;
+        document.getElementById('searchForm').submit();
+    });
+});
+const search_type = document.getElementById('search_type');
+const btn_search = document.getElementById("btn_search");
+btn_search.addEventListener('click', function() {
+    document.getElementById('type').value = document.getElementById('search_type').options[document.getElementById("search_type").selectedIndex].value;
+    document.getElementById('kw').value = document.getElementById('search_kw').value;
+    document.getElementById('page').value = 1;  // 검색버튼을 클릭할 경우 1페이지부터 조회한다.
+    document.getElementById('searchForm').submit();
+});
+
+</script>
+{% endblock %}
