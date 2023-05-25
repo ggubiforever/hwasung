@@ -11,5 +11,3 @@ class bom1Forms(forms.ModelForm):
 
 
 
-class ExcelUploadForm(forms.Form):
-    excel_file = forms.FileField()

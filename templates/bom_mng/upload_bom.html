@@ -14,17 +14,16 @@
 <div style = "display:flex; justify-content:center;">
 <div class = "container my-3" style = "width:600px">
     <p style="text-align:center">업로드할 BOM 파일을 선택하십시오</p>
-    <form id = "upbom" method="post">
+    <form method="POST"  enctype="multipart/form-data">
         {% csrf_token %}
-    <div class="input-group">
-    <input type = "file" class="form-control" name = "excel_file"  accept=".xlsx">
-    <button class="btn btn-primary" type="submit">적용</button>
-    </div>
+        <div class="input-group">
+            <input type = "file" class="form-control" name="upfile" accept=".xlsx" entype="multipart/form-data">
+            <input type ="submit" class="btn btn-primary" value="적용">
+        </div>
     </form>
 
 </div>
 </div>
-
 
 
 {% endblock %}

@@ -4,9 +4,8 @@ from ..models import bom1
 from ..forms import bom1Forms
 from django.core.paginator import Paginator
 from django.contrib import messages
-from ..forms import ExcelUploadForm
-import openpyxl
-
+import pymysql
+import pandas as pd
 
 
 def add_bom(request):
@@ -75,20 +74,37 @@ def delete_bomitm(request):
 def upload_bom(request):
     print("start")
     if "GET" == request.method:
-        print(2)
+
         bom = bom1.objects.filter(seq='1')
         paginator = Paginator(bom, 15)  # 페이지당 15개씩 보여주기
         page_obj = paginator.get_page(1)
         context = {'bom1_list': page_obj, 'page': 1, 'kw': '', 'kw_type': '제품코드'}
         return render(request,'bom_mng/upload_bom.html')
     else:
-        print(1)
-        excel_file = request.FILES['excel_file']
-        wb = openpyxl.load_workbook(excel_file, read_only=True)
+        excel_file = request.FILES['upfile']
+        print(excel_file)
+        df = pd.read_excel(excel_file)
+        df.fillna('', inplace=True)
+        df['last_updated'] = ''
+        cols = df.columns.tolist()
+        for idx, row in df.iterrows():
+            for x in range(36):
+                if x > 11 and df.iloc[idx, x] != '':
+                    tdate = cols[x]
+                    df.loc[idx, 'last_updated'] = tdate
+            jepum_cd = row['모품목코드']
+            seq = row['SEQ']
+            try:
+                deldata = bom1.objects.get(jepum_code=jepum_cd,seq = seq )
+                deldata.delete()
+            except:
+                pass
+            datas = bom1(jepum_code = row['모품목코드'], seq = row['SEQ'], level = row['LV'], jaje_code = row['자품목코드'],
+                         pumname = row['품  명'], descript = row['규  격'], place = row['생산지'], danwi = row['단위'],
+                         soyo = row['소요량'], jodal = row['조달'])
+            print(datas)
+            datas.save()
 
-        # getting a particular sheet by name out of many sheets
-        worksheet = wb["Sheet1"]
-        print(worksheet)
         bom = bom1.objects.filter(seq='1')
         paginator = Paginator(bom, 15)  # 페이지당 15개씩 보여주기
         page_obj = paginator.get_page(1)
